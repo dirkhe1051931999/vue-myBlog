@@ -8,11 +8,12 @@ vue+nuxt+less+es6+webpack
 
 ## 版本
 
-`v1.0.0`
+`v1.0.1`
 
 ## 更新记录
 
-`暂无更新`
+1. 2019-03-16
+   - github授权认证
 
 ## 完成的功能
 
@@ -25,7 +26,7 @@ vue+nuxt+less+es6+webpack
 ### 待完成的功能
 
 1. 评论管理
-2. github 登录
+2. ~~github 授权认证~~
 3. 获取用户位置
 4. ...
 
@@ -48,9 +49,6 @@ plugins: [{ src: '~/plugins/axios' }];
 
 ## 实现效果
 
-![首页](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/1.png)
-![档案](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/2.png)
-![项目](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/3.png)
-![详情](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/4.png)
+![首页](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/1.png) ![档案](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/2.png) ![项目](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/3.png) ![详情](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/4.png)
 
 ## MIT
