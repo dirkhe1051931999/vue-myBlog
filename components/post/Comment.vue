@@ -102,14 +102,18 @@
         </ul>
       </div>
     </section>
-    <Dialog v-show="showDialog" :dialogOption="dialogOption" ref="dialog"></Dialog>
+    <Dialog
+      v-show="showDialog"
+      :dialogOption="dialogOption"
+      ref="dialog"
+    ></Dialog>
   </section>
 </template>
 
 <script>
 import Dialog from "~/components/post/Dialog"
 export default {
-  components:{
+  components: {
     Dialog
   },
   props: {
@@ -122,7 +126,7 @@ export default {
   data() {
     return {
       guestAvatar: "https://avatars1.githubusercontent.com/u/20529801?v=4",
-      isLogin: true,
+      isLogin: false,
       newComment: {
         postId: 0,
         replyId: 0,
@@ -169,11 +173,30 @@ export default {
     }
   },
   mounted() {
-    console.log(this.id);
+    if (this.$route.query.comment && this.$route.query.comment === 'new') {
+      localStorage.removeItem('GITHUB_LOGIN_REDIRECT_URL');
+      setTimeout(() => {
+        this.$refs.commentBox.scrollIntoView();
+        let curHeight = document.documentElement.scrollTop || document.body.scrollTop;
+        document.documentElement.scrollTop = curHeight - 60;
+        document.body.scrollTop = curHeight - 60;
+        this.$refs.newComment.focus();
+      }, 500);
+    }
+    // 获取token和用户信息
+    let token = localStorage.getItem('GITHUB_LOGIN_TOKEN');
+    let guestStr = localStorage.getItem('GITHUB_LOGIN_GUEST')
+    let guest = guestStr !== '' ? JSON.parse(guestStr) : null;
+    if (token && guest) {
+      this.guestAvatar = guest.avatar;
+      this.guestName = guest.userName;
+      this.isLogin = true;
+    }
   },
   methods: {
     githubLogin() {
-
+      window.location.href = 'https://github.com/login/oauth/authorize?client_id=b0fbc6a7d4ff2b320158&redirect_uri=http://127.0.0.1:3000/login&scope=user:email'
+      window.localStorage.setItem('GITHUB_LOGIN_REDIRECT_URL', `${this.$route.path}?comment=new`);
     },
     addNewComment() {
 
