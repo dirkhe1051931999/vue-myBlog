@@ -48,20 +48,20 @@ export default {
   methods: {
     // 确定,将promise断定为完成态
     submit() {
-      // this.resolve('submit');
+      this.resolve('submit');
     },
     // 取消,将promise断定为reject状态
     cancel() {
-      // this.reject('cancel');
+      this.reject('cancel');
     },
     // 显示confirm弹出,并创建promise对象，给父组件调用
     confirm() {
-      // this.promise = new Promise((resolve, reject) => {
-      //   this.resolve = resolve;
-      //   this.reject = reject;
-      // });
-      // // 返回promise对象,给父级组件调用
-      // return this.promise;
+      this.promise = new Promise((resolve, reject) => {
+        this.resolve = resolve;
+        this.reject = reject;
+      });
+      // 返回promise对象,给父级组件调用
+      return this.promise;
     }
   }
 }

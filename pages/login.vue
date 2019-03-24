@@ -20,7 +20,8 @@ export default {
       if (res.data.success === 1) {
         let guest = {
           userName: res.data.userName,
-          avatar: res.data.avatar
+          avatar: res.data.avatar,
+          id:res.data.id
         };
         window.localStorage.setItem('GITHUB_LOGIN_TOKEN', res.data.token);
         window.localStorage.setItem('GITHUB_LOGIN_GUEST', JSON.stringify(guest));

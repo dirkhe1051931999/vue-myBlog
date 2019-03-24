@@ -70,34 +70,20 @@
             <div class="user-avater">
               <img
                 class="reply-comment"
-                :src="comment.avatar"
+                :src="comment.fromAvatar"
                 alt="头像"
-                @click="handleReplyComment(comment)"
               >
             </div>
             <div class="comment-item-info">
-              <p
-                class="user-name reply-comment"
-                @click="handleReplyComment(comment)"
-              >
-                {{ comment.userName }}
+              <p class="user-name reply-comment">
+                {{ comment.fromUserName }}
               </p>
               <div class="comment-item-content">
                 {{ comment.content }}
-                <div
-                  class="comment-item-reply"
-                  v-if="comment.replyComments.length>0"
-                  v-for="(reply,index) in comment.replyComments"
-                >
-                  <p class="comment-item-reply-user">{{reply.userName}}</p>
-                  <div class="comment-item-reply-content">{{reply.content}}</div>
-                  <div class="comment-item-reply-time">{{reply.createdTime}}</div>
-                  <span class="floor">{{reply.number}}楼</span>
-                </div>
               </div>
-              <p class="comment-time">{{ comment.createdTime}}</p>
+              <p class="comment-time">{{comment.createdTime | formatTime}}</p>
             </div>
-            <span class="floor">{{ comment.number }}楼</span>
+            <span class="floor">{{ index+1 }}楼</span>
           </li>
         </ul>
       </div>
@@ -112,6 +98,10 @@
 
 <script>
 import Dialog from "~/components/post/Dialog"
+import axios from "axios"
+import moment from "moment"
+import qs from 'qs';
+import api from "~/http/api"
 export default {
   components: {
     Dialog
@@ -122,14 +112,21 @@ export default {
       default: ""
     }
   },
+  filters: {
+    formatTime: function (time) {
+      moment.locale('zh-cn');
+      let commentTime = moment(time).format('YYYY年MM月DD日 dddd a');
+      return commentTime
+    }
+  },
   name: '',
   data() {
     return {
       guestAvatar: "https://avatars1.githubusercontent.com/u/20529801?v=4",
       isLogin: false,
       newComment: {
-        postId: 0,
-        replyId: 0,
+        postId: '',
+        toUserId: 0,
         content: ''
       },
       replyComment: {
@@ -139,34 +136,13 @@ export default {
       },
       guestName: '',
       guestAvatar: '',
-      comments: [{
-        id: 1,
-        avatar: "https://avatars1.githubusercontent.com/u/20529801?v=4",
-        userName: "小何",
-        content: "你的文章写的真好！",
-        createdTime: "2018年05月11日 星期五 晚上",
-        number: "1",
-        replyComments: [{
-          id: 1,
-          avatar: "https://avatars1.githubusercontent.com/u/20529801?v=4",
-          userName: "小尹",
-          content: "我同意",
-          createdTime: "2018年05月12日 星期六 下午",
-          number: "1",
-        }, {
-          id: 2,
-          avatar: "https://avatars1.githubusercontent.com/u/20529801?v=4",
-          userName: "小钱",
-          content: "我不同意！",
-          createdTime: "2018年05月12日 星期六 下午",
-          number: "2",
-        }]
-      }],
+      userId: '',
+      comments: [],
       commentPlaceHolder: "评论一下吧",
       showDialog: false,
       dialogOption: {
-        title: '提示',
-        text: '好的么么哒',
+        title: '',
+        text: '',
         cancelButtonText: '取消',
         confirmButtonText: '确定'
       }
@@ -175,13 +151,7 @@ export default {
   mounted() {
     if (this.$route.query.comment && this.$route.query.comment === 'new') {
       localStorage.removeItem('GITHUB_LOGIN_REDIRECT_URL');
-      setTimeout(() => {
-        this.$refs.commentBox.scrollIntoView();
-        let curHeight = document.documentElement.scrollTop || document.body.scrollTop;
-        document.documentElement.scrollTop = curHeight - 60;
-        document.body.scrollTop = curHeight - 60;
-        this.$refs.newComment.focus();
-      }, 500);
+      this.scrollToFocus();
     }
     // 获取token和用户信息
     let token = localStorage.getItem('GITHUB_LOGIN_TOKEN');
@@ -190,19 +160,71 @@ export default {
     if (token && guest) {
       this.guestAvatar = guest.avatar;
       this.guestName = guest.userName;
+      this.userId = guest.id;
       this.isLogin = true;
+    }
+    if (this.id) {
+      this.newComment.postId = parseInt(this.id);
+      this.getCommentsByPostId(parseInt(this.id));
     }
   },
   methods: {
+    scrollToFocus() {
+      setTimeout(() => {
+        this.$refs.commentBox.scrollIntoView();
+        let curHeight = document.documentElement.scrollTop || document.body.scrollTop;
+        document.documentElement.scrollTop = curHeight - 60;
+        document.body.scrollTop = curHeight - 60;
+        this.$refs.newComment.focus();
+      }, 500);
+    },
+    async getCommentsByPostId(id) {
+      const result = await axios.get(`${api.api.getComments}${id}`);
+      const data = result.data.comments;
+      this.comments = data;
+    },
     githubLogin() {
-      window.location.href = 'https://github.com/login/oauth/authorize?client_id=b0fbc6a7d4ff2b320158&redirect_uri=http://127.0.0.1:3000/login&scope=user:email'
-      window.localStorage.setItem('GITHUB_LOGIN_REDIRECT_URL', `${this.$route.path}?comment=new`);
+      location.href = api.api.github;
+      localStorage.setItem('GITHUB_LOGIN_REDIRECT_URL', `${this.$route.path}?comment=new`);
     },
     addNewComment() {
-
-    },
-    handleReplyComment() {
-
+      if (this.newComment.content === '') {
+        alert('评论内容不能为空！');
+        return;
+      }    
+      let token = localStorage.getItem('GITHUB_LOGIN_TOKEN');
+      axios.post(api.api.addComment, qs.stringify({
+        comment: this.newComment,
+        token: 'Bearer ' + token
+      })).then(res => {
+        if (res.data.success === 1) {
+          let obj = {
+            fromAvatar: this.guestAvatar,
+            fromUserName: this.guestName,
+            fromUserId: res.data.data.fromUserId,
+            content: this.newComment.content,
+            createdTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+            toUserId: res.data.data.toUserId,
+          }
+          this.comments.unshift(Object.assign({}, obj));
+          this.newComment.content = "";
+        } else if (res.data.success == -1) {
+          this.dialogOption.text = '当前用户登录信息已过期，请重新登录！';
+          this.showDialog = true;
+          this.$refs.dialog.confirm().then(() => {
+            this.showDialog = false;
+            localStorage.removeItem('GITHUB_LOGIN_TOKEN');
+            localStorage.removeItem('GITHUB_LOGIN_GUEST');
+            this.isLogin = false;
+            this.guestAvatar = '';
+            this.guestName = '';
+            this.newComment.content = "";
+          }).catch(() => {
+            this.showDialog = false;
+            this.newComment.content = "";
+          });
+        }
+      })
     }
   }
 }
@@ -381,7 +403,12 @@ export default {
           font-size: 1em;
           color: #9a9a9a;
         }
-
+        .comment-reply {
+          margin-top: 0.5em;
+          font-size: 1em;
+          color: #2d8cf0;
+          cursor: pointer;
+        }
         .comment-item-content {
           padding: 0.5em 0;
           line-height: 1.5;
