@@ -8,7 +8,7 @@ vue+nuxt+less+es6+webpack
 
 ## 版本
 
-`v1.0.2`
+`v1.0.3`
 
 ## 更新记录
 
