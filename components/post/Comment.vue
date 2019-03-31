@@ -102,6 +102,7 @@ import axios from "axios"
 import moment from "moment"
 import qs from 'qs';
 import api from "~/http/api"
+import xss from "xss"
 export default {
   components: {
     Dialog
@@ -169,6 +170,22 @@ export default {
     }
   },
   methods: {
+    xssFilter: function (str) {
+      // options = {}; // 自定义规则
+      // html = xss('', options);
+      // 自定义匹配到不在白名单上的标签时的处理方法
+      var ret = xss(str, {
+        // 白名单,不在白名单上的标签将被过滤，不在白名单上的属性也会被过滤
+        whiteList: {
+          a: ['href', 'title', 'target'],
+          span: ['style']
+        },
+        onIgnoreTag: (tag, html, options) => {
+          return '';
+        }
+      });
+      return ret;
+    },
     scrollToFocus() {
       setTimeout(() => {
         this.$refs.commentBox.scrollIntoView();
@@ -191,7 +208,8 @@ export default {
       if (this.newComment.content === '') {
         alert('评论内容不能为空！');
         return;
-      }    
+      }
+      this.newComment.content = this.xssFilter(this.newComment.content)
       let token = localStorage.getItem('GITHUB_LOGIN_TOKEN');
       axios.post(api.api.addComment, qs.stringify({
         comment: this.newComment,
