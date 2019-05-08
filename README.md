@@ -2,6 +2,11 @@
 
 ---
 
+### 使用步骤
+
+1. 先要开启[后端服务](https://github.com/dirkhe1051931999/vue-blog-management)
+2. 再开启前端服务
+
 ## 技术栈
 
 vue+nuxt+less+es6+webpack
@@ -56,6 +61,14 @@ plugins: [{ src: '~/plugins/axios' }];
 
 ## 实现效果
 
-![首页](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/1.png) ![档案](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/2.png) ![项目](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/3.png) ![详情](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/4.png) ![留言板](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/5.jpg)
+![首页](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/1.png)
+
+![档案](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/2.png)
+
+![项目](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/3.png)
+
+![详情](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/4.png)
+
+![留言板](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/5.jpg)
 
 ## MIT
