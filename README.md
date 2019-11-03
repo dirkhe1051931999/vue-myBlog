@@ -1,11 +1,17 @@
 # 基于 nuxt 的个人博客系统 `客户端`
 
----
-
 ### 使用步骤
 
-1. 先要开启[后端服务](https://github.com/dirkhe1051931999/vue-blog-management)
+1. 先要开启[后端服务](https://github.com/dirkhe1051931999/vue-management)
 2. 再开启前端服务
+
+## 如何使用
+
+```bash
+npm install
+# 访问 http://127.0.0.1:3000，不是localhost！
+npm run dev
+```
 
 ## 技术栈
 
@@ -46,14 +52,8 @@ vue+nuxt+less+es6+webpack
 1. axios 需要写入 nuxt.config.js 中
 
 ```js
-plugins: [{ src: '~/plugins/axios' }];
+plugins: [{ src: "~/plugins/axios" }];
 ```
-
-## 如何使用
-
-1. npm install
-2. npm run dev
-3. 访问 127.0.0.1:3000
 
 ## 关键技术点
 
@@ -61,14 +61,9 @@ plugins: [{ src: '~/plugins/axios' }];
 
 ## 实现效果
 
-![首页](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/1.png)
-
-![档案](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/2.png)
-
-![项目](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/3.png)
-
-![详情](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/4.png)
-
-![留言板](https://github.com/dirkhe1051931999/vue-myBlog/blob/master/screenshot/5.jpg)
-
-## MIT
+![](https://s2.ax1x.com/2019/11/03/KOz5lQ.jpg)
+![](https://s2.ax1x.com/2019/11/03/KOz4Sg.png)
+![](https://s2.ax1x.com/2019/11/03/KOzWY8.png)
+![](https://s2.ax1x.com/2019/11/03/KOzffS.png)
+![](https://s2.ax1x.com/2019/11/03/KOzIyj.png)
+![](https://s2.ax1x.com/2019/11/03/KOzoOs.png)
