@@ -1,9 +1,10 @@
 # 基于 nuxt 的个人博客系统 `客户端`
 
-### 使用步骤
+## 使用步骤
 
 1. 先要开启[后端服务](https://github.com/dirkhe1051931999/vue-management)
 2. 再开启前端服务
+3. nuxt 版的博客已不再维护，新的版本是自己搭的[服务端渲染博客](https://github.com/dirkhe1051931999/vue-ssr-blog)
 
 ## 如何使用
 
@@ -40,7 +41,7 @@ vue+nuxt+less+es6+webpack
 5. 搜索列表，搜索详情
 6. 留言板
 
-### 待完成的功能
+## 待完成的功能
 
 1. ~~评论管理~~
 2. ~~github 授权认证~~
